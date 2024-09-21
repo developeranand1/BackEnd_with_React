@@ -8,6 +8,7 @@ const cors = require('cors');
 const adminRouter=require('./routes/Admin');
 const hotelRouter=require('./routes/Hotel');
 const StaffRouter=require('./routes/Staff');
+const roomRouter=require('./routes/Room')
 
 const app = express();
 const PORT = 4000;
@@ -18,6 +19,7 @@ app.use(cors());
 app.use("/admin",adminRouter);
 app.use("/hotel", hotelRouter);
 app.use("/staff", StaffRouter);
+app.use("/room",roomRouter)
 
 const dbURL =process.env.MY_URL;
 

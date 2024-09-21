@@ -7,11 +7,11 @@ router.get("/hotel-list/:id", async(request, response) => {
     console.log(request.body);
     const {id}=request.params;
     try{
-        const hotelData =await Hotel.findById(id);
-        if(!hotelData){
+        const roomList =await Room.findById(id);
+        if(!roomList){
             return response.status(404).json("hotelData page is not found!");
         }
-        response.status(200).json(hotelData);
+        response.status(200).json(roomList);
     }
     catch(error){
         console.error(error);
@@ -19,15 +19,15 @@ router.get("/hotel-list/:id", async(request, response) => {
     }
 })
 
-router.get("/hotel-list",async(req, res) => {
+router.get("/room-list",async(req, res) => {
    try{
-    const hotelList=await Hotel.find();
+    const roomList=await Room.find().populate("hotelId");
 
-    if(!hotelList){
+    if(!roomList){
         return res.status(404).json({message:"Hotel data is not found!"})
     }
 
-    return res.status(200).json(hotelList);
+    return res.status(200).json(roomList);
    }
    catch(error){
     console.error(error);
@@ -38,19 +38,19 @@ router.get("/hotel-list",async(req, res) => {
 
 
 
-router.post("/add-hotel", async(req, res) => {
+router.post("/add-room", async(req, res) => {
 
-    const {name, address, city, state,zipCode,country} =req.body;
+    const {hotelId, roomNumber, roomType, price,status} =req.body;
 
     try{
-        const hotel=new Hotel({name, address, city, state,zipCode,country});
+        const addRoom=new Room({hotelId, roomNumber, roomType, price,status});
 
-        if(!hotel){
-            return res.status(404).json({mgs:"Hotel page is not found!"})
+        if(!addRoom){
+            return res.status(404).json({mgs:"Room page is not found!"})
         }
 
-        await hotel.save();
-        return res.status(200).json({message:"New Hotel Added Successfully!"})
+        await addRoom.save();
+        return res.status(200).json({message:"New Room Added Successfully!"})
     }
     catch(error){
         console.error(error);
@@ -62,9 +62,9 @@ router.post("/add-hotel", async(req, res) => {
 router.delete("/delete-hotel/:id", async(req, res) => {
    try{
 
-    const deleteHotel=await Hotel.findByIdAndDelete(req.params.id);
+    const roomList=await Room.findByIdAndDelete(req.params.id);
 
-    if(!deleteHotel){
+    if(!roomList){
         return res.status(400).json({message:"Page is not found!"})
     }
     return res.status(200).json({message:"Hotel data is deleted!"})
